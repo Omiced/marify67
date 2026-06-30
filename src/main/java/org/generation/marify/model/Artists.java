@@ -3,6 +3,8 @@ package org.generation.marify.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 /*con la anotacion entity indicamos
   que esta clase es una representación de una tabla de
   nuestra base de datos.
@@ -29,6 +31,11 @@ public class Artists {
     @NotBlank
     private String genere;
 
+    //declarando la relacion del lado del dueño
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Albums> albums;
+
     public Artists(Long id, String name, String genere) {
         this.id = id;
         this.name = name;
@@ -38,6 +45,13 @@ public class Artists {
     public Artists() {
     }
 
+    public List<Albums> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(List<Albums> albums) {
+        this.albums = albums;
+    }
     public Long getId() {
         return id;
     }

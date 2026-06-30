@@ -1,7 +1,10 @@
 package org.generation.marify.service;
 
 
+import org.generation.marify.dto.AlbumsRequest;
+import org.generation.marify.model.Albums;
 import org.generation.marify.model.Artists;
+import org.generation.marify.repository.AlbumsRepository;
 import org.generation.marify.repository.ArtistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +21,11 @@ public class ArtistsService {
      * 3. por constructor !esta es la que vamos a ocupar en spring boot
      */
     private final ArtistsRepository artistsRepository;
-
+    private final AlbumsRepository albumsRepository;
     @Autowired //totalmente opcional, aqui ocurre la inyeccion
-    public ArtistsService(ArtistsRepository artistsRepository) {
+    public ArtistsService(ArtistsRepository artistsRepository, AlbumsRepository albumsRepository) {
         this.artistsRepository = artistsRepository;
+        this.albumsRepository =  albumsRepository;
     }
 
     public List<Artists> getAllArtists(){
@@ -58,6 +62,28 @@ public class ArtistsService {
         );
         if(updatedArtist.getName() != null) savedArtist.setName(updatedArtist.getName());
         if(updatedArtist.getGenere() != null) savedArtist.setGenere(updatedArtist.getGenere());
+        return artistsRepository.save(savedArtist);
+    }
+
+    public Artists addAlbumArtist(Long artistId, AlbumsRequest albumsRequest){
+        //1. verificando si existe un artista con base en el id
+        Artists savedArtist = artistsRepository.findById(artistId).orElseThrow(
+                () -> new IllegalArgumentException("Artista no encontrado")
+        );
+        //2. Si existe el artista creear un album vacio
+        Albums album = new Albums();
+        /*3. verificar la informacion que viene en el albumrequest
+        *  si viene informacion se la asiganamos al album
+        * */
+        if(albumsRequest.name() != null) album.setName(albumsRequest.name());
+        if(albumsRequest.releaseDate() != null) album.setReleaseDate(albumsRequest.releaseDate());
+        //4. asignando el artista al que pertene el albul
+        album.setArtist(savedArtist);
+        //5. guardando el album
+        albumsRepository.save(album);
+        //6. actualizando la lista de albums del artista
+        savedArtist.getAlbums().add(album);
+        //7. actualizando el artista con sus albums en la bd
         return artistsRepository.save(savedArtist);
     }
 

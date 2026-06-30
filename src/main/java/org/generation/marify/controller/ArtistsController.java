@@ -1,5 +1,6 @@
 package org.generation.marify.controller;
 
+import org.generation.marify.dto.AlbumsRequest;
 import org.generation.marify.model.Artists;
 import org.generation.marify.service.ArtistsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,11 @@ public class ArtistsController {
     @PutMapping(path = "{artistId}") // http://localhost:8080/api/artists/id con un body y metodo PUT
     public Artists updateArtist(@PathVariable("artistId") Long id, @RequestBody Artists updatedArtist){
         return artistsService.updateArtistById(id, updatedArtist);
+    }
+
+    @PostMapping(path = "{artistId}/add-album")
+    public Artists addAlbum(@PathVariable("artistId") Long id, @RequestBody AlbumsRequest albumRequest){
+        return artistsService.addAlbumArtist(id, albumRequest);
     }
 
 }
