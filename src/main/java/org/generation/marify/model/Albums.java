@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -38,4 +39,7 @@ public class Albums {
     @JoinColumn(name="artist_id", nullable = false)
     @JsonIgnore
     private Artists artist;
+
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Songs> songs;
 }
