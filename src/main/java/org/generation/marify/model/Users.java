@@ -31,9 +31,8 @@ public class Users {
     @NotBlank
     @Email
     private String email;
-
     @Pattern(
-            regexp = "^(?=.*[A-Z])(?=.*\\\\d)(?=.*[^A-Za-z0-9]).{8,}$",
+            regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$",
             message = "El password debe tener 8 caracteres como minimo, una mayus, un numero y un simbolo especial"
     )
     private String password;

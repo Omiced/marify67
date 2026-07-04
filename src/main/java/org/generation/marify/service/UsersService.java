@@ -73,6 +73,7 @@ public class UsersService {
         Users savedUser = usersRepository.findByEmail(user.getEmail()).orElseThrow(
                 () -> new IllegalArgumentException("Credenciales incorrectas")
         );
+        System.out.println(passwordEncoder.matches(user.getPassword(), savedUser.getPassword()));
         return passwordEncoder.matches(user.getPassword(), savedUser.getPassword());
     }
 }
