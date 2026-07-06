@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 /**
  * 1. hacer esta clase un entidad
  * 2. poner los atributos name y duration, name tipo texto, duration tipo numero
@@ -38,4 +40,8 @@ public class Songs {
     @JoinColumn(name = "album_id", nullable = false)
     @JsonIgnore
     private Albums album;
+
+    @ManyToMany(mappedBy = "songs")
+    @JsonIgnore
+    private Set<Playlist> playlists;
 }
